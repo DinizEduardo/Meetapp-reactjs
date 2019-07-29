@@ -9,7 +9,7 @@ export default function SignIn() {
     <form>
       <img src={Logo} alt="Meetapp" />
       <input type="text" placeholder="Digite seu e-mail" />
-      <input type="text" placeholder="Sua senha" />
+      <input type="password" placeholder="Sua senha" />
       <button type="button">Entrar</button>
       <Link to="/register">Criar conta grátis</Link>
     </form>

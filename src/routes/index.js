@@ -12,12 +12,12 @@ import SignUp from '../pages/SignUp';
 export default function Routes() {
   return (
     <Switch>
-      <Route path="/dashboard" exact component={Dashboard} />
-      <Route path="/details" component={Details} />
       <Route path="/" exact component={SignIn} />
       <Route path="/register" component={SignUp} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/meetup" component={Meetup} />
+      <Route path="/dashboard" exact component={Dashboard} isPrivate />
+      <Route path="/details" component={Details} isPrivate />
+      <Route path="/profile" component={Profile} isPrivate />
+      <Route path="/meetup" component={Meetup} isPrivate />
     </Switch>
   );
 }
