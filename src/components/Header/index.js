@@ -13,7 +13,7 @@ export default function Header() {
         <Info>
           <UserInfos>
             <p>Eduardo Diniz</p>
-            <Link to="/">Meu perfil</Link>
+            <Link to="/profile">Meu perfil</Link>
           </UserInfos>
 
           <button type="button">Sair</button>

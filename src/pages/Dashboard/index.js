@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { MdAddCircle, MdKeyboardArrowRight } from 'react-icons/md';
-import { Container, Content, Meetup, Time } from './styles';
+import { Container, Content, Meetup } from './styles';
 
 export default function Dashboard() {
   return (
