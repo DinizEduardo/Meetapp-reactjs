@@ -20,10 +20,17 @@ export const Content = styled.div`
     flex-direction: column;
     text-align: center;
 
+    span {
+      color: #fb6f91;
+      align-self: flex-start;
+      margin: 10px 0 10px;
+      font-weight: bold;
+    }
+
     input {
       font-size: 14px;
       flex: 1;
-      margin: 5px;
+      margin-bottom: 5px;
       border: 0;
       padding: 10px 15px;
       border-radius: 4px;
