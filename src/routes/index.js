@@ -15,7 +15,7 @@ export default function Routes() {
       <Route path="/" exact component={SignIn} />
       <Route path="/register" component={SignUp} />
       <Route path="/dashboard" exact component={Dashboard} isPrivate />
-      <Route path="/details" component={Details} isPrivate />
+      <Route path="/details/:id" component={Details} isPrivate />
       <Route path="/profile" component={Profile} isPrivate />
       <Route path="/meetup" component={Meetup} isPrivate />
     </Switch>

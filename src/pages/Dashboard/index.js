@@ -43,6 +43,7 @@ export default function Dashboard() {
           time: format(formatIso, "dd 'de' MMMM', às 'HH'h'", { locale: pt }),
           past: isBefore(compareDate, new Date()),
           title: m.title,
+          id: m.id,
         };
       });
       setmeetup(data);
@@ -100,7 +101,7 @@ export default function Dashboard() {
           </ul>
         )}
         {meetup.map(m => (
-          <Link to="/details" key={m.id}>
+          <Link to={`/details/${m.id}`} key={m.id}>
             <Meetup past={m.past}>
               <p>{m.title}</p>
               <div>

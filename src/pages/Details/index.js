@@ -1,43 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { MdDeleteForever, MdEdit, MdLocationOn, MdEvent } from 'react-icons/md';
+import { format, isBefore, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Container, MeetupHeader, DeleteButton, EditButton } from './styles';
-import banner from '../../assets/banner-teste.png';
+import api from '../../services/api';
 // banner-teste.png
-export default function Details() {
+export default function Details({ match }) {
+  const [detail, setDetail] = useState({});
+
+  useEffect(() => {
+    async function loadMeetup() {
+      const meetupId = decodeURIComponent(match.params.id);
+      const response = await api.get('/meetups', {
+        params: { codM: meetupId },
+      });
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const formatIso = parseISO(response.data.date);
+      const compareDate = utcToZonedTime(formatIso, timezone);
+
+      const time = format(formatIso, "dd 'de' MMMM', às 'HH'h'", {
+        locale: pt,
+      });
+      const past = isBefore(compareDate, new Date());
+      const { url } = response.data.File;
+      setDetail({ ...response.data, time, past, url });
+    }
+
+    loadMeetup();
+  }, [match.params.id]);
+  console.tron.log(detail);
   return (
     <Container>
       <MeetupHeader>
-        <h2>Meeup de React Native</h2>
+        <h2>{detail.title}</h2>
         <div>
-          <EditButton type="button">
-            <MdEdit size={22} color="#fff" />
-            Editar
-          </EditButton>
-          <DeleteButton type="button">
-            <MdDeleteForever size={22} color="#fff" />
-            Cancelar
-          </DeleteButton>
+          {!detail.past ? (
+            <>
+              <EditButton type="button">
+                <MdEdit size={22} color="#fff" />
+                Editar
+              </EditButton>
+              <DeleteButton type="button">
+                <MdDeleteForever size={22} color="#fff" />
+                Cancelar
+              </DeleteButton>
+            </>
+          ) : null}
         </div>
       </MeetupHeader>
 
-      <img src={banner} alt="" />
+      <img src={detail.url} alt="" />
 
-      <p>
-        O meetup de React Native é um evento que reune a comunidade
-        desenvolvimento mobile utilizando React a fim de compartilhar
-        conhecimento. Todos são convidados.
-        <br />
-        <br />
-        Caso queira participar como palestrante do meeup envie um e-mail para
-        organizacao@meetuprn.com.br.
-      </p>
+      <p>{detail.description}</p>
 
       <span>
         <MdEvent size={18} color="#999" />
-        24 de Junho, às 20h
+        {detail.time}
         <MdLocationOn size={18} color="#999" />
-        Rua Guilherme Gembala, 260
+        {detail.location}
       </span>
     </Container>
   );
