@@ -6,6 +6,7 @@ import pt from 'date-fns/locale/pt';
 import { utcToZonedTime } from 'date-fns-tz';
 import { Container, MeetupHeader, DeleteButton, EditButton } from './styles';
 import api from '../../services/api';
+import history from '../../services/history';
 // banner-teste.png
 export default function Details({ match }) {
   const [detail, setDetail] = useState({});
@@ -30,7 +31,12 @@ export default function Details({ match }) {
 
     loadMeetup();
   }, [match.params.id]);
-  console.tron.log(detail);
+
+  async function handleDelete(id) {
+    await api.delete(`/meetups/${id}`);
+    history.push('/');
+  }
+
   return (
     <Container>
       <MeetupHeader>
@@ -42,7 +48,10 @@ export default function Details({ match }) {
                 <MdEdit size={22} color="#fff" />
                 Editar
               </EditButton>
-              <DeleteButton type="button">
+              <DeleteButton
+                type="button"
+                onClick={() => handleDelete(detail.id)}
+              >
                 <MdDeleteForever size={22} color="#fff" />
                 Cancelar
               </DeleteButton>
