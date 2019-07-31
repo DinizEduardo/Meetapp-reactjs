@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { HeaderBar, UserInfos, Content, Info } from './styles';
 
 import logo from '../../assets/logo.svg';
@@ -9,7 +9,8 @@ import { signOut } from '../../store/modules/Auth/actions';
 
 export default function Header() {
   const dispatch = useDispatch();
-
+  const profile = useSelector(state => state.user.user);
+  console.tron.log(profile);
   function handleLogout() {
     dispatch(signOut());
   }
@@ -17,10 +18,13 @@ export default function Header() {
   return (
     <HeaderBar>
       <Content>
-        <img src={logo} alt="" />
+        <Link to="/dashboard">
+          <img src={logo} alt="" />
+        </Link>
+
         <Info>
           <UserInfos>
-            <p>Eduardo Diniz</p>
+            <p>{profile.name}</p>
             <Link to="/profile">Meu perfil</Link>
           </UserInfos>
 

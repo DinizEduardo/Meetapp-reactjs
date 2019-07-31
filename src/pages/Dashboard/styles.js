@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { darken } from 'polished';
 
@@ -11,6 +11,19 @@ export const Content = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    li {
+      color: #fff;
+
+      svg {
+        cursor: pointer;
+      }
+    }
+  }
 
   nav {
     display: flex;
@@ -44,9 +57,10 @@ export const Meetup = styled.div`
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
-  margin: 10px 0;
+  margin: 5px 0;
   color: #fff;
   background: rgba(0, 0, 0, 0.15);
+  opacity: ${props => (props.past ? 0.4 : 1)};
   padding: 20px 10px;
   border-radius: 4px;
 

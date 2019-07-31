@@ -4,7 +4,7 @@ import api from '../../../services/api';
 
 import { signInSuccess } from './actions';
 
-function* signIn({ payload }) {
+export function* signIn({ payload }) {
   const { email, password } = payload;
   console.tron.log({ email, password });
   const response = yield call(api.post, 'login', {
@@ -18,28 +18,39 @@ function* signIn({ payload }) {
     return;
   }
 
+  api.defaults.headers.Authorization = `Bearer ${token}`;
+
   yield put(signInSuccess(token, user));
 
   history.push('/dashboard');
 }
 
-function* signUp({ payload }) {
+export function* signUp({ payload }) {
   const { name, email, password } = payload;
 
-  const r = yield call(api.post, 'users', {
+  yield call(api.post, 'users', {
     name,
     email,
     password,
   });
-  console.tron.log(r);
   history.push('/');
 }
 
-function signOut() {
+export function signOut() {
   history.push('/');
+}
+
+export function setToken({ payload }) {
+  if (!payload) return;
+
+  const { token } = payload.auth;
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
 }
 
 export default all([
+  takeLatest('persist/REHYDRATE', setToken),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_UP_REQUEST', signUp),
   takeLatest('@auth/SIGN_OUT', signOut),
