@@ -9,8 +9,8 @@ import { signOut } from '../../store/modules/Auth/actions';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const profile = useSelector(state => state.user.user);
-  console.tron.log(profile);
+  const profile = useSelector(state => state.user.profile);
+
   function handleLogout() {
     dispatch(signOut());
   }

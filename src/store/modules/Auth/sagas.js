@@ -6,7 +6,7 @@ import { signInSuccess } from './actions';
 
 export function* signIn({ payload }) {
   const { email, password } = payload;
-  console.tron.log({ email, password });
+
   const response = yield call(api.post, 'login', {
     email,
     password,
