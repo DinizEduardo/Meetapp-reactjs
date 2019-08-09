@@ -6,17 +6,7 @@ import {
   MdArrowForward,
   MdArrowBack,
 } from 'react-icons/md';
-import {
-  format,
-  subDays,
-  addDays,
-  setHours,
-  setMinutes,
-  setSeconds,
-  isBefore,
-  isEqual,
-  parseISO,
-} from 'date-fns';
+import { format, isBefore, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { utcToZonedTime } from 'date-fns-tz';
 import { Link } from 'react-router-dom';
