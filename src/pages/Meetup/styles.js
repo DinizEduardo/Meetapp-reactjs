@@ -22,6 +22,11 @@ export const Container = styled.div`
   form {
     display: flex;
     flex-direction: column;
+
+    span {
+      color: #b33c3c;
+    }
+
     input {
       border: 0;
       margin: 5px 0px;

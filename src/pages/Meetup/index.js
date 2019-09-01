@@ -66,9 +66,7 @@ export default function Meetup({ match }) {
     title: Yup.string().required('Preencha um titulo para o meetup'),
     description: Yup.string().required('Preencha uma descrição para o meetup'),
     location: Yup.string().required('Preencha o local do meetup'),
-    date: Yup.date('Selecione uma data valida').required(
-      'Preencha a data nesse formato: 01/01/2019 01:00'
-    ),
+    date: Yup.date('Selecione uma data valida').required('Preencha a data'),
     id_file: Yup.number().required('Selecione um banner'),
   });
 
