@@ -33,7 +33,7 @@ export default function SignUp() {
       <Input name="name" type="text" placeholder="Nome completo" />
       <Input name="email" type="email" placeholder="Digite seu e-mail" />
       <Input name="password" type="password" placeholder="Sua senha" />
-      <button type="submit">Entrar</button>
+      <button type="submit">Criar conta</button>
       <Link to="/">Já tenho conta</Link>
     </Form>
   );

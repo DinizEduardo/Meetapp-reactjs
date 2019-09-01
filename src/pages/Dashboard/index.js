@@ -20,12 +20,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function loadMeetups() {
-      const response = await api.get('meetups', {
+      const response = await api.get('/meetups/user', {
         params: { page },
       });
 
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
+      console.tron.log(response.data);
       const data = response.data.map(m => {
         const formatIso = parseISO(m.date);
         const compareDate = utcToZonedTime(formatIso, timezone);

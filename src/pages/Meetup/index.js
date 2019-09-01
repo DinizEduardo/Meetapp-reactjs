@@ -1,9 +1,12 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { MdAddCircle } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 import { Form, Input, Textarea } from '@rocketseat/unform';
 import * as Yup from 'yup';
+import { parseISO, isBefore } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Container, DateLocation } from './styles';
 
 import FileInput from './FileInput';
@@ -12,7 +15,53 @@ import DatePicker from './DatePicker';
 import history from '../../services/history';
 import api from '../../services/api';
 
-export default function Meetup() {
+export default function Meetup({ match }) {
+  const [meetupId] = useState(match.params.id);
+  const [update, setUpdate] = useState(false);
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState(new Date());
+  const idUser = useSelector(state => state.user.profile.id);
+  const [meetup, setMeetup] = useState({
+    title: '',
+    banner_id: 0,
+    description: '',
+    date: new Date(),
+    location: '',
+  });
+
+  useEffect(() => {
+    async function loadMeetup() {
+      if (meetupId) {
+        const response = await api.get(`/meetups/${meetupId}`);
+
+        const data = {
+          ...response.data,
+          url: response.data.File.url,
+          imageId: response.data.File.id,
+        };
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const formatIso = parseISO(data.date);
+        const compareDate = utcToZonedTime(formatIso, timezone);
+        if (isBefore(compareDate, new Date())) {
+          toast.error('Não é possivel editar meetups que já aconteceram');
+          history.push('/');
+        }
+        console.tron.log(data);
+        if (data.User.id !== idUser) {
+          toast.error('Você só pode editar meetups criados por você');
+          history.push('/');
+        }
+
+        setDescription(data.description);
+        setMeetup(data);
+        setUpdate(true);
+        setDate(parseISO(data.date));
+      }
+    }
+
+    loadMeetup();
+  }, [idUser, meetupId]);
+
   const schema = Yup.object().shape({
     title: Yup.string().required('Preencha um titulo para o meetup'),
     description: Yup.string().required('Preencha uma descrição para o meetup'),
@@ -24,28 +73,36 @@ export default function Meetup() {
   });
 
   async function handleSubmit(data) {
-    console.tron.log(data);
-    const response = await api.post('meetups', data);
+    if (meetupId && update) {
+      await api.put(`meetups/${meetupId}`, data);
 
-    console.tron.log(response);
+      toast.success('Meetup atualizado com sucesso');
+      history.push('/dashboard');
+    } else {
+      await api.post('meetups', data);
 
-    history.push('/dashboard');
+      toast.success('Meetup cadastrado com sucesso');
+
+      history.push('/dashboard');
+    }
   }
-
   return (
     <Container>
-      <Form onSubmit={handleSubmit} schema={schema}>
-        <FileInput name="id_file" />
+      <Form onSubmit={handleSubmit} schema={schema} initialData={meetup}>
+        <FileInput name="id_file" image={meetup.url} value={meetup.imageId} />
 
         <Input name="title" type="text" placeholder="Titulo do meetup" />
         <Textarea
           name="description"
-          cols="50"
-          rows="10"
+          rows={5}
+          onChange={e => {
+            setDescription(e.value);
+          }}
+          value={description}
           placeholder="Descrição completa"
         />
         <DateLocation>
-          <DatePicker name="date" />
+          <DatePicker name="date" value={date} />
           <Input name="location" type="text" placeholder="Localização" />
         </DateLocation>
         <button type="submit">

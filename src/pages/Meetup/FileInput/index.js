@@ -6,7 +6,7 @@ import { ImageSpace } from './styles';
 
 import api from '../../../services/api';
 
-export default function FileInput() {
+export default function FileInput({ image, value }) {
   const { defaultValue, registerField } = useField('file');
 
   const [preview, setPreview] = useState(defaultValue && defaultValue.id);
@@ -28,6 +28,13 @@ export default function FileInput() {
   const ref = useRef();
 
   useEffect(() => {
+    if (image && value) {
+      setPreview(image);
+      setFile(value);
+    }
+  }, [image, value]);
+
+  useEffect(() => {
     if (ref.current) {
       registerField({
         name: 'id_file',
@@ -45,6 +52,7 @@ export default function FileInput() {
         data-file={file}
         accept="image/*"
         onChange={handleChange}
+        hidden
         ref={ref}
       />
       <ImageSpace htmlFor="file">

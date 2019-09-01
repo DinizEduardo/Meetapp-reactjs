@@ -23,6 +23,11 @@ export default function Profile() {
         <Input name="name" type="text" placeholder="Seu nome completo" />
         <Input name="email" type="email" placeholder="E-mail" />
         <hr />
+        <Input
+          name="oldPassword"
+          type="password"
+          placeholder="Sua senha atual"
+        />
         <Input name="password" type="password" placeholder="Nova senha" />
         <Input
           name="confirmPassword"

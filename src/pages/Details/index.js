@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 import { MdDeleteForever, MdEdit, MdLocationOn, MdEvent } from 'react-icons/md';
 import { format, isBefore, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
@@ -10,13 +10,11 @@ import history from '../../services/history';
 // banner-teste.png
 export default function Details({ match }) {
   const [detail, setDetail] = useState({});
-
+  const idUser = useSelector(state => state.user.profile.id);
   useEffect(() => {
     async function loadMeetup() {
       const meetupId = decodeURIComponent(match.params.id);
-      const response = await api.get('/meetups', {
-        params: { codM: meetupId },
-      });
+      const response = await api.get(`/meetups/${meetupId}`);
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const formatIso = parseISO(response.data.date);
       const compareDate = utcToZonedTime(formatIso, timezone);
@@ -24,13 +22,14 @@ export default function Details({ match }) {
       const time = format(formatIso, "dd 'de' MMMM', às 'HH'h'", {
         locale: pt,
       });
-      const past = isBefore(compareDate, new Date());
+      const past =
+        isBefore(compareDate, new Date()) || response.data.User.id !== idUser;
       const { url } = response.data.File;
       setDetail({ ...response.data, time, past, url });
     }
 
     loadMeetup();
-  }, [match.params.id]);
+  }, [idUser, match.params.id]);
 
   async function handleDelete(id) {
     await api.delete(`/meetups/${id}`);
@@ -44,7 +43,11 @@ export default function Details({ match }) {
         <div>
           {!detail.past ? (
             <>
-              <EditButton type="button">
+              <EditButton
+                to={`/meetup/${detail.id}`}
+                key={detail.id}
+                type="button"
+              >
                 <MdEdit size={22} color="#fff" />
                 Editar
               </EditButton>

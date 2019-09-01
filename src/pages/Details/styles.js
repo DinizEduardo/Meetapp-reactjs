@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
   max-width: 900px;
@@ -63,6 +64,13 @@ export const DeleteButton = styled.button`
   background: #d44059;
 `;
 
-export const EditButton = styled.button`
+export const EditButton = styled(Link)`
   background: #4dbaf9;
+  display: flex;
+  border: none;
+  align-items: center;
+  margin-left: 10px;
+  padding: 5px 15px;
+  color: #fff;
+  border-radius: 4px;
 `;
